@@ -24,13 +24,17 @@ A_err, tau_err = perr
 
 periods = np.diff(peak_times)
 T_mean = np.mean(periods)
+T_err = np.std(periods, ddof=1) / np.sqrt(len(periods))
 Q = (np.pi * tau) / T_mean
 
-yerr = 0.00872664626 * np.ones_like(peak_values)
+# Calculate Q uncertainty using error propagation
+Q_err = Q * np.sqrt((tau_err / tau)**2 + (T_err / T_mean)**2)
+
+yerr = 0.00872664626
 
 print(f"Tau = {tau:.3f} ± {tau_err:.3f} s")
 print(f"Mean Period = {T_mean:.3f} s")
-print(f"Q Factor = {Q:.3f}")
+print(f"Q Factor = {Q:.3f} ± {Q_err:.3f}")
 
 plt.figure(figsize=(12, 6))
 plt.rcParams.update({'font.size': 30})
@@ -39,7 +43,7 @@ plt.errorbar(peak_times, peak_values, yerr=yerr, fmt='o', markersize = 3,
              ecolor="red", capsize=0, zorder=1)
 
 plt.plot(peak_times, exp_decay(peak_times, A_fit, tau),
-         label=f"Fit: τ={tau:.2f}±{tau_err:.2f}s, Q={Q:.2f}",
+         label=f"Fit: τ={tau:.2f}±{tau_err:.2f}s, Q={Q:.2f}±{Q_err:.2f}",
          color="blue", linewidth=2.5, zorder=2)
 
 plt.xlabel("Time [s]")

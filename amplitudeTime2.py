@@ -32,7 +32,7 @@ T_mean = np.mean(periods)
 Q = (np.pi * tau) / T_mean
 
 # Error bars (constant angular resolution ~0.5° = 0.0087 rad)
-yerr = 0.00872664626 * np.ones_like(peak_values)
+yerr = 0.00872664626
 
 print(f"Tau = {tau:.3f} ± {tau_err:.3f} s")
 print(f"Mean Period = {T_mean:.3f} s")
